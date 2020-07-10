@@ -1,4 +1,4 @@
-Code for ECCV2020 paper "Deep Hough Transform for Semantic Line Detection".
+Code paper "Deep Hough Transform for Semantic Line Detection" (ECCV2020).
 ### Deep Hough Transform
 ![pipeline](./pipeline.png)
 ### Requirements
