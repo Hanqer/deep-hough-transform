@@ -1,0 +1,23 @@
+DATA:
+    TEST_DIR: "data/"
+    TEST_LABEL_FILE: "data/sel_test.txt"
+    WORKERS: 4
+
+MODEL:
+    NUMANGLE: 100
+    NUMRHO: 100
+    THRESHOLD: 0.01
+    BACKBONE: resnet50 
+    # only support : resnet18, resnet50, resnet101, mobilenetv2, resnext50, res2net50, vgg16
+
+TRAIN:
+    EPOCHS: 30
+    PRINT_FREQ: 50
+    TEST: False
+    SEED: 1997
+    GPU_ID: 0
+    DATA_PARALLEL: False
+    RESUME: 
+
+MISC:
+    TMP: "./result/debug"
