@@ -1,4 +1,6 @@
 Code for paper "Deep Hough Transform for Semantic Line Detection" (ECCV2020).
+
+### [Online Demo](http://mc.nankai.edu.cn/dht)
 ### Deep Hough Transform
 ![pipeline](./pipeline.png)
 ### Requirements
@@ -32,3 +34,5 @@ Test the EA-score on SEL dataset. After forwarding the model and get the coordin
 ```sh
 python test.py --pred result/debug/visualize_test/(change to your onw path which includes _.npy files) --gt gt_path/include_txt
 ```
+### License
+Our source code is free for non-commercial usage. Please contact us if you want to use it for comercial usage.
