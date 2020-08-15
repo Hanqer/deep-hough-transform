@@ -1,4 +1,4 @@
-Code for paper "Deep Hough Transform for Semantic Line Detection" (ECCV2020).
+Code for paper "Deep Hough Transform for Semantic Line Detection" (ECCV2020). [Project page](https://mmcheng.net/dhtline/)
 
 ### [Online Demo](http://mc.nankai.edu.cn/dht)
 ### Deep Hough Transform
