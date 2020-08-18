@@ -23,7 +23,7 @@ cd model/_cdht
 python setup.py build 
 python setup.py install --user
 ```
-Pretrain model (based on ResNet50-FPN): https://drive.google.com/file/d/1a6Rbu1Bslyo9sjNlUUdi7NnSTdRIWwS5/view?usp=sharing
+Pretrain model (based on ResNet50-FPN): <http://data.kaizhao.net/projects/deep-hough-transform/dht_r50_fpn-c9a29d40.pth>
 ### Forward
 Generate visualization results and save coordinates to _.npy file.
 ```sh
