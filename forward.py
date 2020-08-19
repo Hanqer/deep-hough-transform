@@ -18,7 +18,7 @@ from utils import reverse_mapping, visulize_mapping, get_boundary_point
 
 parser = argparse.ArgumentParser(description='PyTorch Semantic-Line Testing')
 parser.add_argument('--config', default="./config.yml", help="path to config file")
-parser.add_argument('--model', required=True, help='path to the pretrained model')
+parser.add_argument('--model', required=False, help='path to the pretrained model')
 parser.add_argument('--tmp', default="", help='tmp')
 args = parser.parse_args()
 
@@ -38,6 +38,11 @@ def main():
 
     model = Net(numAngle=CONFIGS["MODEL"]["NUMANGLE"], numRho=CONFIGS["MODEL"]["NUMRHO"], backbone=CONFIGS["MODEL"]["BACKBONE"])
     model = model.cuda(device=CONFIGS["TRAIN"]["GPU_ID"])
+
+    # load the pretrained model (you are free to load your own models)
+    state_dict = torch.hub.load_state_dict_from_url("http://data.kaizhao.net/projects/deep-hough-transform/dht_r50_fpn_sel-c9a29d40.pth", check_hash=True)
+    model.load_state_dict(state_dict)
+
 
     if args.model:
         if isfile(args.model):
