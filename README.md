@@ -41,5 +41,5 @@ python test.py --pred result/debug/visualize_test/(change to your onw path which
 ```
 
 ### License
-Our source code is free for non-commercial usage. For comercial usage. please contact us.
+Our source code  is free for non-commercial usage. Please contact us if you want to use it for comercial usage.
 
