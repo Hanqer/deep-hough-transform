@@ -1,7 +1,19 @@
 DATA:
-    TEST_DIR: "data/"
-    TEST_LABEL_FILE: "data/sel_test.txt"
-    WORKERS: 4
+    DIR: "data/training/"
+    VAL_DIR: "data/training/"
+    TEST_DIR: "data/training/"
+    LABEL_FILE: "data/training/train_1716_100_100.txt"
+    VAL_LABEL_FILE: "data/training/test_1716_100_100.txt"
+    TEST_LABEL_FILE: "data/training/test_1716_100_100.txt"
+    BATCH_SIZE: 8
+    WORKERS: 8
+
+OPTIMIZER:
+    LR: 2e-4
+    MOMENTUM: 0.9
+    GAMMA: 0.1
+    WEIGHT_DECAY: 0.0
+    STEPS: []
 
 MODEL:
     NUMANGLE: 100

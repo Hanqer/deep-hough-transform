@@ -1,5 +1,6 @@
 import argparse
 import os
+import random
 import time
 from os.path import isfile, join, split
 
@@ -14,11 +15,12 @@ from logger import Logger
 from dataloader import get_loader
 from model.network import Net
 from skimage.measure import label, regionprops
-from utils import reverse_mapping, visulize_mapping, get_boundary_point
+from utils import reverse_mapping, visulize_mapping
 
-parser = argparse.ArgumentParser(description='PyTorch Semantic-Line Testing')
+parser = argparse.ArgumentParser(description='PyTorch Semantic-Line Training')
+# arguments from command line
 parser.add_argument('--config', default="./config.yml", help="path to config file")
-parser.add_argument('--model', required=False, help='path to the pretrained model')
+parser.add_argument('--model', required=True, help='path to the pretrained model')
 parser.add_argument('--tmp', default="", help='tmp')
 args = parser.parse_args()
 
@@ -39,27 +41,22 @@ def main():
     model = Net(numAngle=CONFIGS["MODEL"]["NUMANGLE"], numRho=CONFIGS["MODEL"]["NUMRHO"], backbone=CONFIGS["MODEL"]["BACKBONE"])
     model = model.cuda(device=CONFIGS["TRAIN"]["GPU_ID"])
 
-    # load the pretrained model (you are free to load your own models)
-    state_dict = torch.hub.load_state_dict_from_url("http://data.kaizhao.net/projects/deep-hough-transform/dht_r50_fpn_sel-c9a29d40.pth", check_hash=True)
-    model.load_state_dict(state_dict)
-
-
     if args.model:
         if isfile(args.model):
             logger.info("=> loading pretrained model '{}'".format(args.model))
             checkpoint = torch.load(args.model)
-            model.load_state_dict(checkpoint)
-            logger.info("=> loaded checkpoint '{}'"
-                  .format(args.model))
+            model.load_state_dict(checkpoint['state_dict'])
+            logger.info("=> loaded checkpoint '{}' (epoch {})"
+                  .format(args.model, checkpoint['epoch']))
         else:
             logger.info("=> no pretrained model found at '{}'".format(args.model))
-            exit()
     # dataloader
     test_loader = get_loader(CONFIGS["DATA"]["TEST_DIR"], CONFIGS["DATA"]["TEST_LABEL_FILE"], 
                                 batch_size=1, num_thread=CONFIGS["DATA"]["WORKERS"], test=True)
 
     logger.info("Data loading done.")
 
+    
     
     logger.info("Start testing.")
     total_time = test(test_loader, model, args)
