@@ -3,7 +3,7 @@
 Code accompanying the paper "Deep Hough Transform for Semantic Line Detection" (ECCV2020).
 [arXiv2003.04676](https://arxiv.org/abs/2003.04676) | [Online Demo](http://mc.nankai.edu.cn/dht) | [Project page](http://mmcheng.net/dhtline) | [New dataset](http://kaizhao.net/nkl) | [Line Annotator](https://github.com/Hanqer/lines-manual-labeling)
 
-* Training code is open avaliable new.
+* Training code is open available new.
 
 ### Deep Hough Transform
 ![pipeline](./pipeline.png)
