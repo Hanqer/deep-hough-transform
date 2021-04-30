@@ -1,0 +1,10 @@
+rm -rf tmp
+rm -f *.log
+rm -f *.pdf
+rm -f *.dvi
+rm -f *.bbl
+rm -f *.brf
+rm -f *.out
+rm -f *.aux
+rm -f *.blg
+rm -f *.gz
