@@ -6,3 +6,5 @@ Run `bash build.sh` to generate the PDF paper and `bash clean.sh` to delete gene
 auxiliary files.
 
 A generated PDF can be found [here](http://data.kaizhao.net/publications/tpami2021line.pdf).
+
+*Codes are tested on Win10 and Ubuntu20LTS with TexLive2020.*
