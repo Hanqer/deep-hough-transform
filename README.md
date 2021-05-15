@@ -3,7 +3,7 @@
 Code accompanying the paper "Deep Hough Transform for Semantic Line Detection" (ECCV 2020, PAMI 2021).
 [arXiv2003.04676](https://arxiv.org/abs/2003.04676) | [Online Demo](http://mc.nankai.edu.cn/dht) | [Project page](http://mmcheng.net/dhtline) | [New dataset](http://kaizhao.net/nkl) | [Line Annotator](https://github.com/Hanqer/lines-manual-labeling)
 
-* Training code is open available new.
+* Training code is open available now.
 
 ### Deep Hough Transform
 ![pipeline](./pipeline.png)
@@ -28,7 +28,8 @@ cd model/_cdht
 python setup.py build 
 python setup.py install --user
 ```
-Pretrain model (based on ResNet50-FPN): <http://data.kaizhao.net/projects/deep-hough-transform/dht_r50_fpn_sel-c9a29d40.pth>
+Pretrain model (based on ResNet50-FPN): <http://data.kaizhao.net/projects/deep-hough-transform/dht_r50_fpn_sel-c9a29d40.pth> (SEL dataset) and 
+<http://data.kaizhao.net/projects/deep-hough-transform/dht_r50_nkl_d97b97138.pth> (NKL dataset / used in online demo)
 
 ### Prepare training data
 Download original SEL dataset from [here](https://mcl.korea.ac.kr/research/Submitted/jtlee_slnet/ICCV2017_JTLEE_dataset.7z) and extract to `data/` directory. After that, the directory structure should be like:
