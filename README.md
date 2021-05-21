@@ -78,6 +78,7 @@ For NKL dataset, run the follwoing command.
 ```sh
 python test_nkl.py --pred result/debug/visualiza_test/(change to your own path which includes _.npy files) --gt gt_path/include_txt
 ```
+If you want to evaluate on other metrics such as CD and EMD, please change the evaluation function in metric.py
 
 ### License
 Our source code is free for non-commercial usage. Please contact us if you want to use it for comercial usage.
