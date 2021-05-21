@@ -6,8 +6,6 @@ High speed performance Jittor implementation Code accompanying the paper "Deep H
 * Jittor inference code is open available now. 
 * Training code will come soon.
 
-### Deep Hough Transform
-![pipeline](./pipeline.png)
 
 ### Requirements
 ``` 
