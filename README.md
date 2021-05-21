@@ -1,4 +1,4 @@
-# Deep Hough Transform
+<h1 style="align: center; color: #159957">Deep Hough Transform for Semantic Line Detection</h1>
 
 Code accompanying the paper "Deep Hough Transform for Semantic Line Detection" (ECCV 2020, PAMI 2021).
 [arXiv2003.04676](https://arxiv.org/abs/2003.04676) | [Online Demo](http://mc.nankai.edu.cn/dht) | [Project page](http://mmcheng.net/dhtline) | [New dataset](http://kaizhao.net/nkl) | [Line Annotator](https://github.com/Hanqer/lines-manual-labeling)
@@ -80,6 +80,28 @@ python test_nkl.py --pred result/debug/visualiza_test/(change to your own path w
 ```
 If you want to evaluate on other metrics such as CD and EMD, please change the evaluation function in metric.py
 
+### Citation
+If our method/dataset are useful to your research, please consider to cite us:
+```
+@article{zhao2021deep,
+  author    = {Kai Zhao and Qi Han and Chang-bin Zhang and Jun Xu and Ming-ming Cheng},
+  title     = {Deep Hough Transform for Semantic Line Detection},
+  journal   = {IEEE Transactions on Pattern Analysis and Machine Intelligence (TPAMI)},
+  year      = {2021},
+  doi       = {10.1109/TPAMI.2021.3077129}
+}
+```
+```
+@inproceedings{eccv2020line,
+  title={Deep Hough Transform for Semantic Line Detection},
+  author={Qi Han and Kai Zhao and Jun Xu and Ming-Ming Cheng},
+  booktitle={ECCV},
+  pages={750--766},
+  year={2020}
+}
+```
+
 ### License
-Our source code is free for non-commercial usage. Please contact us if you want to use it for comercial usage.
+This project is licensed under the [Creative Commons NonCommercial (CC BY-NC 3.0)](https://creativecommons.org/licenses/by-nc/3.0/) license where only
+non-commercial usage is allowed. For commercial usage, please contact us.
 
