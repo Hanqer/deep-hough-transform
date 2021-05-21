@@ -81,7 +81,7 @@ python test_nkl.py --pred result/debug/visualiza_test/(change to your own path w
 If you want to evaluate on other metrics such as CD and EMD, please change the evaluation function in metric.py
 
 ### Citation
-You you found our method/dataset useful to your research, please consider to cite us:
+If our method/dataset are useful to your research, please consider to cite us:
 ```
 @article{zhao2021deep,
   author    = {Kai Zhao and Qi Han and Chang-bin Zhang and Jun Xu and Ming-ming Cheng},
