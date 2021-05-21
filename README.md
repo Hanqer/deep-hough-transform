@@ -18,6 +18,7 @@ pytorch>=1.0
 torchvision
 tqdm
 yml
+POT
 deep-hough
 ```
 
@@ -46,8 +47,13 @@ data
 
 Then run python script to generate parametric space label.
 ```sh
-cd deep-hough-tranfrom
+cd deep-hough-transfrom
 python data/prepare_data_JTLEE.py --root './data/ICCV2017_JTLEE_images/' --label './data/ICCV2017_JTLEE_gtlines_all' --save-dir './data/training/JTLEE_resize_100_100/' --list './data/training/JTLEE.lst' --prefix 'JTLEE_resize_100_100' --fixsize 400 --numangle 100 --numrho 100
+```
+For NKL dataset, you can download the dataset and put it to data dir. Then run python script to generate parametric space label.
+```sh
+cd deep-hough-transform
+python data/prepare_data_NKL.py --root './data/NKL' --label './data/NKL' --save-dir './data/training/NKL_resize_100_100' --fixsize 400
 ```
 
 ### Training
@@ -66,7 +72,11 @@ CUDA_VISIBLE_DEVICES=0 python forward.py --model （your_best_model.pth） --tmp
 ### Evaluate
 Test the EA-score on SEL dataset. After forwarding the model and get the coordinates files. Run the following command to produce EA-score.
 ```sh
-python test.py --pred result/debug/visualize_test/(change to your onw path which includes _.npy files) --gt gt_path/include_txt
+python test_sel.py --pred result/debug/visualize_test/(change to your own path which includes _.npy files) --gt gt_path/include_txt
+```
+For NKL dataset, run the follwoing command.
+```sh
+python test_nkl.py --pred result/debug/visualiza_test/(change to your own path which includes _.npy files) --gt gt_path/include_txt
 ```
 
 ### License

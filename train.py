@@ -20,7 +20,8 @@ from dataloader import get_loader
 from model.network import Net
 from skimage.measure import label, regionprops
 from tensorboardX import SummaryWriter
-from utils import reverse_mapping, caculate_precision, caculate_recall
+from utils import reverse_mapping, edge_align
+from hungarian_matching import caculate_tp_fp_fn
 
 parser = argparse.ArgumentParser(description='PyTorch Semantic-Line Training')
 # arguments from command line
@@ -158,18 +159,18 @@ def train(train_loader, model, optimizer, epoch, writer, args):
     total_loss_hough = 0
     for i, data in enumerate(bar):
 
-        images, hough_space_label8, names = data
+        images, hough_space_label, _, names = data
 
         if CONFIGS["TRAIN"]["DATA_PARALLEL"]:
             images = images.cuda()
-            hough_space_label8 = hough_space_label8.cuda()
+            hough_space_label = hough_space_label.cuda()
         else:
             images = images.cuda(device=CONFIGS["TRAIN"]["GPU_ID"])
-            hough_space_label8 = hough_space_label8.cuda(device=CONFIGS["TRAIN"]["GPU_ID"])
+            hough_space_label = hough_space_label.cuda(device=CONFIGS["TRAIN"]["GPU_ID"])
             
         keypoint_map = model(images)
 
-        hough_space_loss = torch.nn.functional.binary_cross_entropy_with_logits(keypoint_map, hough_space_label8)
+        hough_space_loss = torch.nn.functional.binary_cross_entropy_with_logits(keypoint_map, hough_space_label)
 
         writer.add_scalar('train/hough_space_loss', hough_space_loss.item(), epoch * iter_num + i)
 
@@ -207,10 +208,14 @@ def validate(val_loader, model, epoch, writer, args):
     total_acc = 0.0
     total_loss_hough = 0
 
-    total_precision = np.zeros(99)
-    total_recall = np.zeros(99)
-    nums_precision = 0
-    nums_recall = 0
+    total_tp = np.zeros(99)
+    total_fp = np.zeros(99)
+    total_fn = np.zeros(99)
+
+    total_tp_align = np.zeros(99)
+    total_fp_align = np.zeros(99)
+    total_fn_align = np.zeros(99)
+
     with torch.no_grad():
         bar = tqdm.tqdm(val_loader)
         iter_num = len(val_loader.dataset) // 1
@@ -248,33 +253,52 @@ def validate(val_loader, model, epoch, writer, args):
                 plist.append(prop.centroid)
             b_points = reverse_mapping(plist, numAngle=CONFIGS["MODEL"]["NUMANGLE"], numRho=CONFIGS["MODEL"]["NUMRHO"], size=(400, 400))
             # [[y1, x1, y2, x2], [] ...]
-            gt_coords = gt_coords[0].numpy().tolist()
+            gt_coords = gt_coords[0].tolist()
             for i in range(1, 100):
-                p, num_p = caculate_precision(b_points, gt_coords, thresh=i*0.01)
-                r, num_r = caculate_recall(b_points, gt_coords, thresh=i*0.01)
-                total_precision[i-1] += p
-                total_recall[i-1] += r
+                tp, fp, fn = caculate_tp_fp_fn(b_points, gt_coords, thresh=i*0.01)
+                total_tp[i-1] += tp
+                total_fp[i-1] += fp
+                total_fn[i-1] += fn
 
-            nums_precision += num_p
-            nums_recall += num_r
+            if CONFIGS["MODEL"]["EDGE_ALIGN"]:
+                for i in range(len(b_points)):
+                    b_points[i] = edge_align(b_points[i], names[0], division=5)
+                
+                for i in range(1, 100):
+                    tp, fp, fn = caculate_tp_fp_fn(b_points, gt_coords, thresh=i*0.01)
+                    total_tp_align[i-1] += tp
+                    total_fp_align[i-1] += fp
+                    total_fn_align[i-1] += fn
             
         total_loss_hough = total_loss_hough / iter_num
-        if nums_precision == 0:
-            nums_precision = 0
-        else:
-            total_precision = total_precision / nums_precision
-        if nums_recall == 0:
-            total_recall = 0
-        else:
-            total_recall /= nums_recall
-
+        
+        total_recall = total_tp / (total_tp + total_fn + 1e-8)
+        total_precision = total_tp / (total_tp + total_fp + 1e-8)
+        f = 2 * total_recall * total_precision / (total_recall + total_precision + 1e-8)
+        
+       
         writer.add_scalar('val/total_loss_hough', total_loss_hough, epoch)
         writer.add_scalar('val/total_precison', total_precision.mean(), epoch)
         writer.add_scalar('val/total_recall', total_recall.mean(), epoch)
         logger.info('Validation result: ==== Precision: %.5f, Recall: %.5f' % (total_precision.mean(), total_recall.mean()))
-        acc = 2 * total_precision * total_recall / (total_precision + total_recall + 1e-6)
-        logger.info('Validation result: ==== F-score: %.5f' % acc.mean())
-        writer.add_scalar('val/f-score', acc.mean(), epoch)
+        acc = f.mean()
+        logger.info('Validation result: ==== F-measure: %.5f' % acc.mean())
+        logger.info('Validation result: ==== F-measure@0.95: %.5f' % f[95 - 1])
+        writer.add_scalar('val/f-measure', acc.mean(), epoch)
+        writer.add_scalar('val/f-measure@0.95', f[95 - 1], epoch)
+        
+        if CONFIGS["MODEL"]["EDGE_ALIGN"]:
+            total_recall_align = total_tp_align / (total_tp_align + total_fn_align + 1e-8)
+            total_precision_align = total_tp_align / (total_tp_align + total_fp_align + 1e-8)
+            f_align = 2 * total_recall_align * total_precision_align / (total_recall_align + total_precision_align + 1e-8)
+            writer.add_scalar('val/total_precison_align', total_precision_align.mean(), epoch)
+            writer.add_scalar('val/total_recall_align', total_recall_align.mean(), epoch)
+            logger.info('Validation result (Aligned): ==== Precision: %.5f, Recall: %.5f' % (total_precision_align.mean(), total_recall_align.mean()))
+            acc = f_align.mean()
+            logger.info('Validation result (Aligned): ==== F-measure: %.5f' % acc.mean())
+            logger.info('Validation result (Aligned): ==== F-measure@0.95: %.5f' % f_align[95 - 1])
+            writer.add_scalar('val/f-measure', acc.mean(), epoch)
+            writer.add_scalar('val/f-measure@0.95', f_align[95 - 1], epoch)
     return acc.mean()
 
 

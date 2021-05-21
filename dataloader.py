@@ -31,14 +31,22 @@ class SemanLineDataset(Dataset):
             image = self.transform(image)
             
         hough_space_label8 = torch.from_numpy(hough_space_label8).unsqueeze(0)
+        gt_coords = data["coords"]
+        
         if self.split == 'val':
-            gt_coords = data["coords"]
             return image, hough_space_label8, gt_coords, self.image_path[item].split('/')[-1]
         elif self.split == 'train':
-            return image, hough_space_label8, self.image_path[item].split('/')[-1]
+            return image, hough_space_label8, gt_coords, self.image_path[item].split('/')[-1]
 
     def __len__(self):
         return len(self.image_path)
+
+    def collate_fn(self, batch):
+        images, hough_space_label8, gt_coords, names = list(zip(*batch))
+        images = torch.stack([image for image in images])
+        hough_space_label8 = torch.stack([hough_space_label for hough_space_label in hough_space_label8])
+
+        return images, hough_space_label8, gt_coords, names
 
 class SemanLineDatasetTest(Dataset):
 
@@ -52,15 +60,20 @@ class SemanLineDatasetTest(Dataset):
 
         assert isfile(self.image_path[item]), self.image_path[item]
         image = Image.open(self.image_path[item]).convert('RGB')
-
+        w, h = image.size
         if self.transform is not None:
             image = self.transform(image)
             
-        return image, self.image_path[item].split('/')[-1]
-
+        return image, self.image_path[item].split('/')[-1], (h, w)
 
     def __len__(self):
         return len(self.image_path)
+
+    def collate_fn(self, batch):
+        images, names, sizes = list(zip(*batch))
+        images = torch.stack([image for image in images])
+    
+        return images, names, sizes
 
 def get_loader(root_dir, label_file, batch_size, img_size=0, num_thread=4, pin=True, test=False, split='train'):
     if test is False:
@@ -77,8 +90,12 @@ def get_loader(root_dir, label_file, batch_size, img_size=0, num_thread=4, pin=T
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
         ])
         dataset = SemanLineDatasetTest(root_dir, label_file, transform=transform, t_transform=None)
-    data_loader = DataLoader(dataset=dataset, batch_size=batch_size, shuffle=True, num_workers=num_thread,
-                                    pin_memory=pin)
+    if test is False:
+        data_loader = DataLoader(dataset=dataset, batch_size=batch_size, shuffle=True, num_workers=num_thread,
+                                    pin_memory=pin, collate_fn=dataset.collate_fn)
+    else:
+        data_loader = DataLoader(dataset=dataset, batch_size=batch_size, shuffle=False, num_workers=num_thread,
+                                    pin_memory=pin, collate_fn=dataset.collate_fn)
     return data_loader
 
         

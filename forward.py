@@ -5,22 +5,28 @@ import time
 from os.path import isfile, join, split
 
 import torch
+import torchvision
+import torch.backends.cudnn as cudnn
+import torch.nn as nn
+import torch.optim
 import numpy as np
 import tqdm
 import yaml
 import cv2
 
+from torch.optim import lr_scheduler
 from logger import Logger
 
 from dataloader import get_loader
 from model.network import Net
 from skimage.measure import label, regionprops
-from utils import reverse_mapping, visulize_mapping
+from utils import reverse_mapping, visulize_mapping, edge_align, get_boundary_point
 
 parser = argparse.ArgumentParser(description='PyTorch Semantic-Line Training')
 # arguments from command line
 parser.add_argument('--config', default="./config.yml", help="path to config file")
 parser.add_argument('--model', required=True, help='path to the pretrained model')
+parser.add_argument('--align', default=False, action='store_true')
 parser.add_argument('--tmp', default="", help='tmp')
 args = parser.parse_args()
 
@@ -74,11 +80,12 @@ def test(test_loader, model, args):
         ntime = 0
         for i, data in enumerate(bar):
             t = time.time()
-            images, names, img_size = data
-
+            images, names, size = data
+            
             images = images.cuda(device=CONFIGS["TRAIN"]["GPU_ID"])
-            size = (img_size[0].item(), img_size[1].item())        
+            # size = (size[0].item(), size[1].item())       
             key_points = model(images)
+            
             key_points = torch.sigmoid(key_points)
             ftime += (time.time() - t)
             t = time.time()
@@ -92,7 +99,7 @@ def test(test_loader, model, args):
             for prop in props:
                 plist.append(prop.centroid)
 
-            #size = (400, 400) #change it when using other dataset.
+            size = (size[0][0], size[0][1])
             b_points = reverse_mapping(plist, numAngle=CONFIGS["MODEL"]["NUMANGLE"], numRho=CONFIGS["MODEL"]["NUMRHO"], size=(400, 400))
             scale_w = size[1] / 400
             scale_h = size[0] / 400
@@ -110,12 +117,23 @@ def test(test_loader, model, args):
 
             
             vis = visulize_mapping(b_points, size, names[0])
+
+            
+
             cv2.imwrite(join(visualize_save_path, names[0].split('/')[-1]), vis)
             np_data = np.array(b_points)
             np.save(join(visualize_save_path, names[0].split('/')[-1].split('.')[0]), np_data)
 
-    logger.info('forward time for total images: %.6f' % ftime)
-    logger.info('post-processing time for total images: %.6f' % ntime)
+            if CONFIGS["MODEL"]["EDGE_ALIGN"] and args.align:
+                for i in range(len(b_points)):
+                    b_points[i] = edge_align(b_points[i], names[0], size, division=5)
+                vis = visulize_mapping(b_points, size, names[0])
+                cv2.imwrite(join(visualize_save_path, names[0].split('/')[-1].split('.')[0]+'_align.png'), vis)
+                np_data = np.array(b_points)
+                np.save(join(visualize_save_path, names[0].split('/')[-1].split('.')[0]+'_align'), np_data)
+            ntime += (time.time() - t)
+    print('forward time for total images: %.6f' % ftime)
+    print('post-processing time for total images: %.6f' % ntime)
     return ftime + ntime
 
 if __name__ == '__main__':
