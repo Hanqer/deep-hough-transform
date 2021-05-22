@@ -6,6 +6,119 @@ High speed performance Jittor implementation Code accompanying the paper "Deep H
 * Jittor inference code is open available now. 
 * Training code will come soon.
 
+### High speed of Jittor framework
+Network inference FPS and speedup ratio (without post processing): 
+<table>
+   <tr>
+      <td rowspan="2"></td>
+      <td colspan="3">TITAN XP</td>
+      <td colspan="3">Tesla P100</td>
+      <td colspan="3">RTX 2080Ti</td>
+   </tr>
+   <tr>
+      <td>bs=1</td>
+      <td>bs=4</td>
+      <td>bs=8</td>
+     <td>bs=1</td>
+      <td>bs=4</td>
+      <td>bs=8</td>
+     <td>bs=1</td>
+      <td>bs=4</td>
+      <td>bs=8</td>
+   </tr>
+   <tr>
+      <td>Jittor</td>
+      <td>44</td>
+      <td>54</td>
+     <td>56</td>
+     <td>42</td>
+      <td>49</td>
+     <td>52</td>
+     <td>82</td>
+      <td>98</td>
+     <td>100</td>
+   </tr>
+   <tr>
+      <td>Pytorch</td>
+      <td>39</td>
+      <td>48</td>
+     <td>49</td>
+     <td>35</td>
+      <td>44</td>
+     <td>44</td>
+     <td>64</td>
+      <td>71</td>
+     <td>71</td>
+   </tr>
+  <tr>
+      <td>Speedup</td>
+      <td>1.13</td>
+      <td>1.13</td>
+     <td>1.14</td>
+     <td>1.20</td>
+      <td>1.11</td>
+     <td>1.18</td>
+     <td>1.28</td>
+      <td>1.38</td>
+     <td>1.41</td>
+   </tr>
+</table>
+
+<table>
+   <tr>
+      <td rowspan="2"></td>
+      <td colspan="3">Tesla V100 (16G PCI-E)</td>
+      <td colspan="3">Tesla V100</td>
+      <td colspan="3">RTX TITAN</td>
+   </tr>
+   <tr>
+      <td>bs=1</td>
+      <td>bs=4</td>
+      <td>bs=8</td>
+     <td>bs=1</td>
+      <td>bs=4</td>
+      <td>bs=8</td>
+     <td>bs=1</td>
+      <td>bs=4</td>
+      <td>bs=8</td>
+   </tr>
+   <tr>
+      <td>Jittor</td>
+      <td>89</td>
+      <td>115</td>
+     <td>120</td>
+     <td>88</td>
+      <td>108</td>
+     <td>113</td>
+     <td>27</td>
+      <td>74</td>
+     <td>106</td>
+   </tr>
+   <tr>
+      <td>Pytorch</td>
+      <td>38</td>
+      <td>75</td>
+     <td>82</td>
+     <td>10</td>
+      <td>34</td>
+     <td>53</td>
+     <td>9</td>
+      <td>15</td>
+     <td>34</td>
+   </tr>
+   <tr>
+      <td>Speedup</td>
+      <td>2.34</td>
+      <td>1.53</td>
+     <td>1.46</td>
+     <td>8.80</td>
+      <td>3.18</td>
+     <td>2.13</td>
+     <td>3.00</td>
+      <td>4.93</td>
+     <td>3.12</td>
+   </tr>
+</table>
 
 ### Requirements
 ``` 
