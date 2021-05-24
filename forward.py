@@ -51,7 +51,10 @@ def main():
         if isfile(args.model):
             logger.info("=> loading pretrained model '{}'".format(args.model))
             checkpoint = torch.load(args.model)
-            model.load_state_dict(checkpoint['state_dict'])
+            if 'state_dict' in checkpoint.keys():
+                model.load_state_dict(checkpoint['state_dict'])
+            else:
+                model.load_state_dict(checkpoint)
             logger.info("=> loaded checkpoint '{}' (epoch {})"
                   .format(args.model, checkpoint['epoch']))
         else:
