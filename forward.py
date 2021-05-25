@@ -55,8 +55,8 @@ def main():
                 model.load_state_dict(checkpoint['state_dict'])
             else:
                 model.load_state_dict(checkpoint)
-            logger.info("=> loaded checkpoint '{}' (epoch {})"
-                  .format(args.model, checkpoint['epoch']))
+            logger.info("=> loaded checkpoint '{}'"
+                  .format(args.model))
         else:
             logger.info("=> no pretrained model found at '{}'".format(args.model))
     # dataloader
