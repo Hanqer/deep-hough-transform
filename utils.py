@@ -86,7 +86,7 @@ def visulize_mapping(b_points, size, filename):
     img = cv2.imread(os.path.join('./data/NKL', filename)) #change the path when using other dataset.
     img = cv2.resize(img, size)
     for (y1, x1, y2, x2) in b_points:
-        img = cv2.line(img, (x1, y1), (x2, y2), (255, 255, 0), thickness=3)
+        img = cv2.line(img, (x1, y1), (x2, y2), (255, 255, 0), thickness=int(0.01*max(size[0], size[1])))
     return img
 
 def caculate_precision(b_points, gt_coords, thresh=0.90):

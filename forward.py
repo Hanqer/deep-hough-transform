@@ -118,8 +118,7 @@ def test(test_loader, model, args):
                 (x1, y1), (x2, y2) = get_boundary_point(y1, x1, angle, size[0], size[1])
                 b_points[i] = (y1, x1, y2, x2)
 
-            
-            vis = visulize_mapping(b_points, size, names[0])
+            vis = visulize_mapping(b_points, size[::-1], names[0])
 
             
 
