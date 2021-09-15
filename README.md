@@ -64,22 +64,8 @@ Then, run the following command.
 python train.py
 ```
 
-### Forward
-Generate visualization results and save coordinates to _.npy file.
-```sh
-CUDA_VISIBLE_DEVICES=0 python forward.py --model （your_best_model.pth） --tmp (your_result_save_dir)
-```
-
-### Evaluate
-Test the EA-score on SEL dataset. After forwarding the model and get the coordinates files. Run the following command to produce EA-score.
-```sh
-python test_sel.py --pred result/debug/visualize_test/(change to your own path which includes _.npy files) --gt gt_path/include_txt
-```
-For NKL dataset, run the follwoing command.
-```sh
-python test_nkl.py --pred result/debug/visualiza_test/(change to your own path which includes _.npy files) --gt gt_path/include_txt
-```
-If you want to evaluate on other metrics such as CD and EMD, please change the evaluation function in metric.py
+### Testing
+Please refer to [test](./test.md) for detailed steps to reproduce the testing results.
 
 ### Citation
 If our method/dataset are useful to your research, please consider to cite us:
