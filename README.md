@@ -48,7 +48,7 @@ data
 
 Then run python script to generate parametric space label.
 ```sh
-cd deep-hough-transfrom
+cd deep-hough-transform
 python data/prepare_data_JTLEE.py --root './data/ICCV2017_JTLEE_images/' --label './data/ICCV2017_JTLEE_gtlines_all' --save-dir './data/training/JTLEE_resize_100_100/' --list './data/training/JTLEE.lst' --prefix 'JTLEE_resize_100_100' --fixsize 400 --numangle 100 --numrho 100
 ```
 For NKL dataset, you can download the dataset and put it to data dir. Then run python script to generate parametric space label.
