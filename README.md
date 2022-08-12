@@ -3,8 +3,13 @@
 Jittor and Pytorch code accompanying the paper "Deep Hough Transform for Semantic Line Detection" (ECCV 2020, PAMI 2021).
 [arXiv2003.04676](https://arxiv.org/abs/2003.04676) | [Online Demo](http://mc.nankai.edu.cn/dht) | [Project page](http://mmcheng.net/dhtline) | [New dataset](http://kaizhao.net/nkl) | [Line Annotator](https://github.com/Hanqer/lines-manual-labeling)
 
+
+
+### Updates
+* Thanks [@HassanBinHaroon](https://github.com/HassanBinHaroon) for the Google Colab implementation of our paper: <https://github.com/HassanBinHaroon/deep-hough-transform>. You can run it anywhere with Google colab.
 * Training code is open available now.
 * Jittor inference code is open available now.
+
 
 ### Deep Hough Transform
 ![pipeline](./pipeline.png)
@@ -24,6 +29,7 @@ deep-hough
 ```
 
 To install deep-hough, run the following commands.
+
 ```sh
 cd deep-hough-transform
 cd model/_cdht
