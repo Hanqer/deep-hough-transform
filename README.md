@@ -1,7 +1,7 @@
 <h1 style="align: center; color: #159957">Deep Hough Transform for Semantic Line Detection</h1>
 
 Jittor and Pytorch code accompanying the paper "Deep Hough Transform for Semantic Line Detection" (ECCV 2020, PAMI 2021).
-[arXiv2003.04676](https://arxiv.org/abs/2003.04676) | [Online Demo](http://mc.nankai.edu.cn/dht) | [Project page](http://mmcheng.net/dhtline) | [New dataset](http://kaizhao.net/nkl) | [Line Annotator](https://github.com/Hanqer/lines-manual-labeling)
+[arXiv2003.04676](https://arxiv.org/abs/2003.04676) | [Online Demo](http://mc.nankai.edu.cn/dht) | [Project page](http://mmcheng.net/dhtline) | [New dataset](https://data.kaizhao.net/deep-hough-transform/NKL.zip) | [Line Annotator](https://github.com/Hanqer/lines-manual-labeling)
 
 
 
@@ -36,8 +36,8 @@ cd model/_cdht
 python setup.py build 
 python setup.py install --user
 ```
-Pretrain models (based on ResNet50-FPN): <https://kaizhao.net/deep-hough-transform/dht_r50_fpn_sel-c9a29d40.pth> (SEL dataset) and 
-<https://kaizhao.net/deep-hough-transform/dht_r50_nkl_d97b97138.pth> (NKL dataset / used in online demo)
+Pretrain models (based on ResNet50-FPN): <https://data.kaizhao.net/deep-hough-transform/dht_r50_fpn_sel-c9a29d40.pth> (SEL dataset) and 
+<https://data.kaizhao.net/deep-hough-transform/dht_r50_nkl_d97b97138.pth> (NKL dataset / used in online demo)
 
 ### Prepare training data
 Download original SEL dataset from [here](https://mcl.korea.ac.kr/research/Submitted/jtlee_slnet/ICCV2017_JTLEE_dataset.7z) and extract to `data/` directory. After that, the directory structure should be like:
